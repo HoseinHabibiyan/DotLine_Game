@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dot Line Game',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
       debugShowCheckedModeBanner: false,
@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Text(
                   "${_firstPlayerRound ? "Player One" : "Player Two"}",
                   style: TextStyle(
+                      fontWeight: FontWeight.bold,
                       color:
                           _firstPlayerRound ? Colors.blueAccent : Colors.red),
                 ),
@@ -67,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.greenAccent,
+                  color: Colors.blueAccent,
                 ),
                 alignment: Alignment.center,
                 width: 100,
@@ -75,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(
                   "Reset Game",
                   textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             )
@@ -164,23 +166,28 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
           if (dotIndex < 9)
-            InkWell(
-              onTap: () => {drawVerticalLine(dotIndex)},
-              child: Container(
-                width: 10,
-                height: MediaQuery.of(context).size.width / 4,
-                color: _lines.any((x) =>
-                        x.source == dotIndex && x.destination == dotIndex + 3)
-                    ? _lines
-                                .firstWhere((x) =>
-                                    x.source == dotIndex &&
-                                    x.destination == dotIndex + 3)
-                                .player ==
-                            0
-                        ? Colors.blueAccent
-                        : Colors.redAccent
-                    : Colors.white12,
-              ),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () => {drawVerticalLine(dotIndex)},
+                  child: Container(
+                    width: 10,
+                    height: MediaQuery.of(context).size.width / 4,
+                    color: _lines.any((x) =>
+                            x.source == dotIndex &&
+                            x.destination == dotIndex + 3)
+                        ? _lines
+                                    .firstWhere((x) =>
+                                        x.source == dotIndex &&
+                                        x.destination == dotIndex + 3)
+                                    .player ==
+                                0
+                            ? Colors.blueAccent
+                            : Colors.redAccent
+                        : Colors.white12,
+                  ),
+                ),
+              ],
             ),
         ],
       ));
@@ -198,10 +205,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    print("dot ${dotIndex}");
     _lines.add(Line(dotIndex, dotIndex + 3, _firstPlayerRound ? 0 : 1));
     _firstPlayerRound = !_firstPlayerRound;
-
     renderBoard();
   }
 
@@ -211,7 +216,6 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    print("dot ${dotIndex}");
     _lines.add(Line(dotIndex, dotIndex + 1, _firstPlayerRound ? 0 : 1));
     _firstPlayerRound = !_firstPlayerRound;
     renderBoard();
