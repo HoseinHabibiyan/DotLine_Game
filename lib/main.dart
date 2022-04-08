@@ -33,9 +33,12 @@ class _MyHomePageState extends State<MyHomePage> {
   var _lines = new List<Line>.empty(growable: true);
 
   int _startRow = -3;
+  bool _firstPlayerRound = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
           title: const Text("Dot Line Game"),
         ),
@@ -80,18 +83,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: _lines.any((x) =>
                             x.source == dotIndex - 1 &&
                             x.destination == dotIndex)
-                        ? Colors.blueAccent
-                        : Colors.white,
+                        ? _lines
+                                    .firstWhere((x) =>
+                                        x.source == dotIndex - 1 &&
+                                        x.destination == dotIndex)
+                                    .player ==
+                                0
+                            ? Colors.blueAccent
+                            : Colors.redAccent
+                        : Colors.black,
                   ),
                 ),
               Container(
                 alignment: Alignment.center,
-                width: 50,
-                height: 50,
+                width: 25,
+                height: 25,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: _dots.length > dotIndex && _dots[dotIndex] == 0
-                        ? Colors.grey
+                        ? Color.fromARGB(255, 255, 255, 255)
                         : _dots.length > dotIndex && _dots[dotIndex] == 1
                             ? Colors.blueAccent
                             : Colors.redAccent),
@@ -108,8 +118,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: _lines.any((x) =>
                             x.source == dotIndex &&
                             x.destination == dotIndex + 1)
-                        ? Colors.blueAccent
-                        : Colors.white,
+                        ? _lines
+                                    .firstWhere((x) =>
+                                        x.source == dotIndex &&
+                                        x.destination == dotIndex + 1)
+                                    .player ==
+                                0
+                            ? Colors.blueAccent
+                            : Colors.redAccent
+                        : Colors.black,
                   ),
                 )
             ],
@@ -122,8 +139,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: MediaQuery.of(context).size.width / 4,
                 color: _lines.any((x) =>
                         x.source == dotIndex && x.destination == dotIndex + 3)
-                    ? Colors.blueAccent
-                    : Colors.white,
+                    ? _lines
+                                .firstWhere((x) =>
+                                    x.source == dotIndex &&
+                                    x.destination == dotIndex + 3)
+                                .player ==
+                            0
+                        ? Colors.blueAccent
+                        : Colors.redAccent
+                    : Colors.black,
               ),
             ),
         ],
@@ -142,8 +166,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
+    _firstPlayerRound = !_firstPlayerRound;
+
     print("dot ${dotIndex}");
-    _lines.add(Line(dotIndex, dotIndex + 3));
+    _lines.add(Line(dotIndex, dotIndex + 3, _firstPlayerRound ? 0 : 1));
     renderBoard();
   }
 
@@ -153,13 +179,15 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
+    _firstPlayerRound = !_firstPlayerRound;
+
     print("dot ${dotIndex}");
-    _lines.add(Line(dotIndex, dotIndex + 1));
+    _lines.add(Line(dotIndex, dotIndex + 1, _firstPlayerRound ? 0 : 1));
     renderBoard();
   }
 }
 
 class Line {
-  int source, destination;
-  Line(this.source, this.destination) {}
+  int source, destination, player;
+  Line(this.source, this.destination, this.player) {}
 }
