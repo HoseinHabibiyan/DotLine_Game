@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -38,11 +40,46 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
         appBar: AppBar(
           title: const Text("Dot Line Game"),
         ),
-        body: renderBoard());
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Player Round : ",
+                  style: TextStyle(color: Colors.black87),
+                ),
+                Text(
+                  "${_firstPlayerRound ? "Player One" : "Player Two"}",
+                  style: TextStyle(
+                      color:
+                          _firstPlayerRound ? Colors.blueAccent : Colors.red),
+                ),
+              ],
+            ),
+            renderBoard(),
+            InkWell(
+              onTap: () => {ResetGame()},
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.greenAccent,
+                ),
+                alignment: Alignment.center,
+                width: 100,
+                height: 30,
+                child: Text(
+                  "Reset Game",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   Widget renderBoard() {
@@ -91,21 +128,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                 0
                             ? Colors.blueAccent
                             : Colors.redAccent
-                        : Colors.black,
+                        : Colors.white10,
                   ),
                 ),
               Container(
-                alignment: Alignment.center,
-                width: 25,
-                height: 25,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: _dots.length > dotIndex && _dots[dotIndex] == 0
-                        ? Color.fromARGB(255, 255, 255, 255)
-                        : _dots.length > dotIndex && _dots[dotIndex] == 1
-                            ? Colors.blueAccent
-                            : Colors.redAccent),
-              ),
+                  alignment: Alignment.center,
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.black38)),
               if (dotIndex == 1 ||
                   dotIndex == 4 ||
                   dotIndex == 7 ||
@@ -126,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 0
                             ? Colors.blueAccent
                             : Colors.redAccent
-                        : Colors.black,
+                        : Colors.white10,
                   ),
                 )
             ],
@@ -147,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             0
                         ? Colors.blueAccent
                         : Colors.redAccent
-                    : Colors.black,
+                    : Colors.white12,
               ),
             ),
         ],
@@ -166,10 +198,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    _firstPlayerRound = !_firstPlayerRound;
-
     print("dot ${dotIndex}");
     _lines.add(Line(dotIndex, dotIndex + 3, _firstPlayerRound ? 0 : 1));
+    _firstPlayerRound = !_firstPlayerRound;
+
     renderBoard();
   }
 
@@ -179,10 +211,15 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    _firstPlayerRound = !_firstPlayerRound;
-
     print("dot ${dotIndex}");
     _lines.add(Line(dotIndex, dotIndex + 1, _firstPlayerRound ? 0 : 1));
+    _firstPlayerRound = !_firstPlayerRound;
+    renderBoard();
+  }
+
+  void ResetGame() {
+    _lines.clear();
+    _firstPlayerRound = true;
     renderBoard();
   }
 }
